@@ -8,16 +8,14 @@
     <androidx.cardview.widget.CardView
         android:id="@+id/cover_card"
         android:layout_width="0dp"
-        android:layout_height="96dp"
+        android:layout_height="0dp"
         android:layout_marginStart="15dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="10dp"
         app:cardCornerRadius="4dp"
         app:cardElevation="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toBottomOf="@+id/other"
         app:layout_constraintDimensionRatio="1.6"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="@+id/title">
 
         <ImageView
             android:id="@+id/cover"
@@ -32,6 +30,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
+        android:layout_marginTop="8dp"
         android:layout_marginEnd="15dp"
         android:ellipsize="end"
         android:lines="2"
@@ -39,22 +38,22 @@
         android:textSize="15sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/cover_card"
-        app:layout_constraintTop_toTopOf="@+id/cover_card" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/reason"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
+        android:layout_height="15dp"
+        android:layout_marginTop="2dp"
         android:layout_marginBottom="2dp"
+        android:gravity="bottom"
         android:paddingStart="2dp"
-        android:paddingTop="1dp"
         android:paddingEnd="2dp"
-        android:paddingBottom="1dp"
         android:textColor="@color/orange"
         android:textSize="12sp"
         app:layout_constraintBottom_toTopOf="@+id/author_name"
-        app:layout_constraintStart_toEndOf="@+id/cover_card" />
+        app:layout_constraintStart_toStartOf="@+id/title"
+        app:layout_constraintTop_toBottomOf="@+id/title" />
 
     <TextView
         android:id="@+id/duration"
@@ -76,28 +75,31 @@
         android:id="@+id/author_name"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
         android:layout_marginBottom="2dp"
         android:drawableStart="@drawable/icon_0"
+        android:drawablePadding="2dp"
+        android:gravity="bottom"
         android:singleLine="true"
         android:textColor="@color/gray"
-        android:textSize="13sp"
+        android:textSize="12sp"
         app:layout_constraintBottom_toTopOf="@+id/other"
         app:layout_constraintEnd_toEndOf="@+id/title"
-        app:layout_constraintStart_toEndOf="@+id/cover_card" />
+        app:layout_constraintStart_toStartOf="@+id/title" />
 
     <TextView
         android:id="@+id/other"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
+        android:layout_marginBottom="8dp"
         android:drawableStart="@drawable/icon_1"
+        android:drawablePadding="2dp"
+        android:gravity="bottom"
         android:singleLine="true"
         android:textColor="@color/gray"
-        android:textSize="13sp"
-        app:layout_constraintBottom_toBottomOf="@+id/cover_card"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/title"
-        app:layout_constraintStart_toEndOf="@+id/cover_card" />
+        app:layout_constraintStart_toStartOf="@+id/title" />
 
     <View
         android:id="@+id/view"
@@ -109,4 +111,14 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <ImageView
+        android:id="@+id/block"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="8dp"
+        android:tint="@color/gray"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:srcCompat="@drawable/icon_2" />
 </androidx.constraintlayout.widget.ConstraintLayout>

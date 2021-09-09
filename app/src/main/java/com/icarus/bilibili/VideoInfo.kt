@@ -68,4 +68,22 @@ data class VideoInfo(
         val dateFormat = SimpleDateFormat(pattern, Locale.CHINA)
         return dateFormat.format(Date(this))
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as VideoInfo
+
+        if (avID != other.avID) return false
+        if (bvID != other.bvID) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result = avID?.hashCode() ?: 0
+        result = 31 * result + (bvID?.hashCode() ?: 0)
+        return result
+    }
 }

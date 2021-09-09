@@ -5,15 +5,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity">
-<androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-    android:id="@+id/refresh"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/video_list"
-        android:scrollbars="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
-</androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
+<fragment
+    android:id="@+id/fragment"
+    android:name="com.icarus.bilibili.VideoListFragment"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

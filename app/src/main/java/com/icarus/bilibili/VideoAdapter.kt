@@ -1,6 +1,8 @@
 package com.icarus.bilibili
 
+import android.app.AlertDialog
 import android.content.Context
+import android.content.DialogInterface
 import android.content.Intent
 import android.net.Uri
 import android.view.LayoutInflater
@@ -11,11 +13,12 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 
-class VideoAdapter(private val context: Context, private val list: List<VideoInfo>) :
+class VideoAdapter(private val context: Context, private val list: MutableList<VideoInfo>) :
     RecyclerView.Adapter<VideoAdapter.ViewHolder>() {
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val cover: ImageView by lazy { view.findViewById<ImageView>(R.id.cover) }
+        val block: ImageView by lazy { view.findViewById<ImageView>(R.id.block) }
         val title: TextView by lazy { view.findViewById<TextView>(R.id.title) }
         val reason: TextView by lazy { view.findViewById<TextView>(R.id.reason) }
         val authorName: TextView by lazy { view.findViewById<TextView>(R.id.author_name) }
@@ -55,6 +58,18 @@ class VideoAdapter(private val context: Context, private val list: List<VideoInf
             intent.data = Uri.parse(item.linkAv)
             context.startActivity(intent)
         }
+        holder.block.setOnClickListener {
+            AlertDialog.Builder(context).setMessage("屏蔽UP主：${item.author?.name}")
+                .setPositiveButton("确认") { _: DialogInterface, _: Int ->
+                    PopularBlock(null, item.author?.mid).save()
+                    list.removeAt(holder.adapterPosition)
+                    notifyItemRemoved(holder.adapterPosition)
+                }
+                .create()
+                .show()
+        }
+
+
     }
 
     override fun getItemCount(): Int {
