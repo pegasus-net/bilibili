@@ -46,4 +46,5 @@ dependencies {
     implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
     implementation 'androidx.cardview:cardview:1.0.0'
     implementation 'org.litepal.guolindev:core:3.2.3'
+    implementation 'com.github.pegasus-net:IcarusUtil:2.0'
 }

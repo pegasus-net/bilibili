@@ -1,4 +1,4 @@
-package com.icarus.bilibili
+package com.icarus.bilibili.adapter
 
 import android.app.AlertDialog
 import android.content.Context
@@ -12,9 +12,15 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.icarus.bilibili.R
+import com.icarus.bilibili.data.VideoInfo
+import com.icarus.bilibili.data.filter.PopularBlock
+import com.icarus.bilibili.data.filter.VideoFilter
+import com.icarus.bilibili.ui.dialog.FilterDialog
+import org.litepal.LitePal
 
-class VideoAdapter(private val context: Context, private val list: MutableList<VideoInfo>) :
-    RecyclerView.Adapter<VideoAdapter.ViewHolder>() {
+class VideoAdapter2(private val context: Context, private val list: MutableList<VideoInfo>) :
+    RecyclerView.Adapter<VideoAdapter2.ViewHolder>() {
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val cover: ImageView by lazy { view.findViewById<ImageView>(R.id.cover) }
@@ -59,20 +65,12 @@ class VideoAdapter(private val context: Context, private val list: MutableList<V
             context.startActivity(intent)
         }
         holder.block.setOnClickListener {
-            AlertDialog.Builder(context).setMessage("屏蔽UP主：${item.author?.name}")
-                .setPositiveButton("确认") { _: DialogInterface, _: Int ->
-                    PopularBlock(null, item.author?.mid).save()
-                    list.removeAt(holder.adapterPosition)
-                    notifyItemRemoved(holder.adapterPosition)
-                }
-                .create()
-                .show()
+            FilterDialog(context, item.author!!).show()
         }
-
-
     }
 
     override fun getItemCount(): Int {
         return list.size
     }
+
 }

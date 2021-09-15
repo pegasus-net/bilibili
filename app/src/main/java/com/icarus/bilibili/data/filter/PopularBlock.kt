@@ -1,4 +1,4 @@
-package com.icarus.bilibili
+package com.icarus.bilibili.data.filter
 
 import org.litepal.crud.LitePalSupport
 

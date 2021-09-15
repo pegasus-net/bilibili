@@ -1,4 +1,4 @@
-package com.icarus.bilibili
+package com.icarus.bilibili.data
 
 import com.google.gson.annotations.SerializedName
 import java.text.SimpleDateFormat

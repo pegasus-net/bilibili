@@ -1,5 +1,6 @@
-package com.icarus.bilibili
+package com.icarus.bilibili.ui.fragment
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -8,6 +9,13 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import com.icarus.bilibili.DynamicLoader
+import com.icarus.bilibili.Loader
+import com.icarus.bilibili.R
+import com.icarus.bilibili.adapter.VideoAdapter
+import com.icarus.bilibili.adapter.VideoAdapter2
+import com.icarus.bilibili.data.VideoInfo
+import com.icarus.bilibili.data.filter.VideoFilter
 import org.litepal.LitePal
 
 class VideoListFragment(private val dataLoader: Loader<VideoInfo>) : Fragment() {
@@ -23,18 +31,13 @@ class VideoListFragment(private val dataLoader: Loader<VideoInfo>) : Fragment() 
     }
 
     private lateinit var rootView: View
-    private lateinit var refresh: SwipeRefreshLayout
     private lateinit var videoList: RecyclerView
     private val list = ArrayList<VideoInfo>()
-    private lateinit var adapter: VideoAdapter
+    private lateinit var adapter: VideoAdapter2
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         rootView = view
-        refresh = view.findViewById(R.id.refresh)
         videoList = view.findViewById(R.id.video_list)
-        refresh.setOnRefreshListener {
-            loadData(true)
-        }
         videoList.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                 val manager = recyclerView.layoutManager as LinearLayoutManager
@@ -48,28 +51,18 @@ class VideoListFragment(private val dataLoader: Loader<VideoInfo>) : Fragment() 
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        adapter = VideoAdapter(activity!!, list)
+        adapter = VideoAdapter2(activity!!, list)
         videoList.adapter = adapter
         videoList.layoutManager = LinearLayoutManager(activity)
-        dataLoader.filter = { it ->
-            val title = it.title ?: ""
-            val mid = it.author?.mid ?: ""
-            val filter = LitePal.where("mid = ?", mid).find(KeyWord::class.java)
-            var allow = true
-            filter.forEach { keyWord ->
-                if (title.contains(keyWord.key)) {
-                    allow = keyWord.allow
-                } else {
-                    allow = !keyWord.allow
-                }
-            }
-            allow
+        dataLoader.filter = {
+            getFilter(it)
         }
         loadData(true)
     }
 
     private var isLoad = false
 
+    @SuppressLint("NotifyDataSetChanged")
     private fun loadData(reload: Boolean) {
         if (isLoad) return
         if (!dataLoader.hasMore) return
@@ -81,7 +74,6 @@ class VideoListFragment(private val dataLoader: Loader<VideoInfo>) : Fragment() 
                 dataLoader.load()
             }
             activity?.runOnUiThread {
-                if (refresh.isRefreshing) refresh.isRefreshing = false
                 isLoad = false
                 if (reload) {
                     list.clear()
@@ -93,7 +85,15 @@ class VideoListFragment(private val dataLoader: Loader<VideoInfo>) : Fragment() 
     }
 
 
-    private fun getFilter(it: VideoInfo) {
-
+    private fun getFilter(videoInfo: VideoInfo): Boolean {
+        val title = videoInfo.title ?: ""
+        val mid = videoInfo.author?.mid ?: ""
+        val filters = LitePal.where("mid = ?", mid).find(VideoFilter::class.java)
+        var videoWeight = 0
+        filters.forEach { filter ->
+            if (title.contains(filter.titleKey)) videoWeight += filter.weight
+            if (filter.titleKey == "全部") videoWeight += filter.weight
+        }
+        return videoWeight >= 0
     }
 }

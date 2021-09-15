@@ -1,10 +1,13 @@
-package com.icarus.bilibili
+package com.icarus.bilibili.data.jsonParser
 
 import com.google.gson.Gson
 import com.google.gson.annotations.SerializedName
+import com.icarus.bilibili.data.VideoInfo
+import com.icarus.bilibili.log
 
-class DynamicVideoParser(json: String) {
-    private val bean: JsonBean = Gson().fromJson(json, JsonBean::class.java)
+class DynamicVideoParser(json: String):JsonParser<List<VideoInfo>> ,PagerLoader{
+    private val gson = Gson()
+    private val bean: JsonBean = gson.fromJson(json, JsonBean::class.java)
 
     data class JsonBean(
         var code: Int = -1,
@@ -24,17 +27,13 @@ class DynamicVideoParser(json: String) {
         var videoInfo: String?
     )
 
-    fun getVideoList(): List<VideoInfo> {
-        if (bean.code != 0) {
-            bean.code.log()
-        }
-        return bean.data?.cards?.map { Gson().fromJson(it.videoInfo, VideoInfo::class.java) }
+    override fun getParserResult(): List<VideoInfo> {
+        return bean.data?.cards?.map { gson.fromJson(it.videoInfo, VideoInfo::class.java) }
             ?: ArrayList()
     }
 
-    fun getOffset(): String? {
+    override fun nextPagerIndex(): String? {
         bean.data?.run {
-            log()
             if (next_offset != null) return next_offset
             if (history_offset != null) return history_offset
         }

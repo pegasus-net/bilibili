@@ -1,5 +1,7 @@
 package com.icarus.bilibili
 
+import com.icarus.bilibili.data.VideoInfo
+import com.icarus.bilibili.data.jsonParser.DynamicVideoParser
 import okhttp3.OkHttpClient
 import okhttp3.Request
 
@@ -15,9 +17,9 @@ class DynamicLoader : Loader<VideoInfo>() {
         val response = client.newCall(getRequest(offset)).execute()
         val json = response.body?.string() ?: ""
         val parser = DynamicVideoParser(json)
-        this.offset = parser.getOffset()
+        this.offset = parser.nextPagerIndex()
         hasMore = this.offset != null
-        return parser.getVideoList()
+        return parser.getParserResult()
     }
 
 
@@ -25,12 +27,12 @@ class DynamicLoader : Loader<VideoInfo>() {
         return if (offset == null) {
             Request.Builder()
                 .url(DYNAMIC_NEW)
-                .header("Cookie", "SESSDATA=dc12be4e,1646727137,ddbbe*91")
+                .header("Cookie", "SESSDATA=15f704af%2C1647252796%2Cbabfb%2A91")
                 .build()
         } else {
             Request.Builder()
                 .url(DYNAMIC_HISTORY + offset)
-                .header("Cookie", "SESSDATA=dc12be4e,1646727137,ddbbe*91")
+                .header("Cookie", "SESSDATA=15f704af%2C1647252796%2Cbabfb%2A91")
                 .build()
         }
     }

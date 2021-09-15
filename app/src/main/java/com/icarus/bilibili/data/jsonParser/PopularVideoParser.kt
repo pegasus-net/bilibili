@@ -1,8 +1,9 @@
-package com.icarus.bilibili
+package com.icarus.bilibili.data.jsonParser
 
 import com.google.gson.Gson
+import com.icarus.bilibili.data.VideoInfo
 
-class PopularVideoParser(json: String) {
+class PopularVideoParser(json: String):JsonParser<List<VideoInfo>>{
     private val bean: JsonBean = Gson().fromJson(json, JsonBean::class.java)
 
     data class JsonBean(
@@ -15,7 +16,7 @@ class PopularVideoParser(json: String) {
         var list: List<VideoInfo>? = null
     )
 
-    fun getVideoList(): List<VideoInfo> {
+    override fun getParserResult(): List<VideoInfo> {
         return bean.data?.list ?: ArrayList()
     }
 }
